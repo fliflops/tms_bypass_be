@@ -19,7 +19,7 @@ module.exports = async () => {
 
             const tripDetails = await models.tms_trip_dtl_tbl.findAll({
                 where:{
-                    br_no: data.map(item => item.br_no)
+                    br_no: job.data.map(item => item.br_no)
                 }
             })
 
