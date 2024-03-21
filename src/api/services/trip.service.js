@@ -338,10 +338,7 @@ const generateKronosTemplate = async(data, filePath='') => {
             header: 'Weight UOM'
         },
         {
-            header:'Ancilliary Volume'
-        },
-        {
-            header: 'Ancilliary Volume'
+            header: 'Ancillary Volume'
         },
         {
             header:'Volume UOM'
