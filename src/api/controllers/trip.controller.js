@@ -58,7 +58,7 @@ exports.convertTripJob = async(req,res,next) => {
             jobId: data.upload_id
         })
 
-        res.status(200).end();
+        res.status(200).json();
     }
     catch(e){
         next(e)

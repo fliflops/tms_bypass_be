@@ -233,7 +233,7 @@ const generateKronosTemplate = async(data, filePath='') => {
             key:'event_description'
         },
         {
-            header:'Planned Date & Time	Actual',
+            header:'Planned Date & Time',
             key:'planned_date'
         },
         {
@@ -255,6 +255,10 @@ const generateKronosTemplate = async(data, filePath='') => {
             key:'trip_id'
         },
         {
+            header:'Trip Leg',
+            key: 'trip_leg'
+        },
+        {
             header:'Dispatch Document',
             key:'dispatch_document'
         },
@@ -273,6 +277,10 @@ const generateKronosTemplate = async(data, filePath='') => {
         {
             header:'Actual THU Qty',
             key:'actual_qty'
+        },
+        {
+            header:'Damaged Qty',
+            key:'damaged_qty'
         },
         {
             header:'Reason Code',
@@ -318,9 +326,6 @@ const generateKronosTemplate = async(data, filePath='') => {
             header:'Qty Returned'
         },
         {
-            header:'Qty Received'
-        },
-        {
             header:'Qty Left'
         },
         {
@@ -334,6 +339,9 @@ const generateKronosTemplate = async(data, filePath='') => {
         },
         {
             header:'Ancilliary Volume'
+        },
+        {
+            header: 'Ancilliary Volume'
         },
         {
             header:'Volume UOM'
@@ -354,13 +362,15 @@ const generateUploadID = async() => {
     return `RAW${String(count + 1).padStart(9,'000000000')}`
 }
 
-const generateTripNo = async() => {
+exports.generateTripNo = async() => {
     const tripNo = await models.tms_trip_hdr_tbl.max('trip_no')
+    
     if(!tripNo) {
-        return 'TRP000000001'
+        return 'TRPN00000001'
     }
-    const count = Number(String(tripNo).substring(3))
-    return `TRP${String(count + 1).padStart(9,'000000000')}`
+    const count = Number(String(tripNo).substring(4))
+
+    return `TRPN${String(count + 1).padStart(8,'00000000')}`
 }
 
 exports.tripUpload = async(file) => {
@@ -385,7 +395,7 @@ exports.tripConvert = async(data = []) => {
     })
     
     const group = _.groupBy(data,(item) => item.trip_no);
-    let trip_no = await generateTripNo();
+    let trip_no = await exports.generateTripNo();
     
     Object.keys(group).map(key => {
         const trip = data.find(item => String(item.trip_no) === key)
@@ -400,7 +410,7 @@ exports.tripConvert = async(data = []) => {
             vehicle_id: vehicleTypes.find(item => item.vehicle_type === trip.vehicle_type)?.default_vehicle_id || null,
             details
         })
-        trip_no = 'TRP'+String(Number(String(trip_no).substring(3)) + 1).padStart(9,'000000000')
+        trip_no = 'TRPN'+String(Number(String(trip_no).substring(4)) + 1).padStart(8,'00000000')
     });
 
     tms_trips.map(({details, ...trip}) => {

@@ -71,11 +71,10 @@ module.exports = async () => {
     })
 
     worker.on('failed', async(job, error) => {
-        console.log('Failed',error.message || error.name)
-
+       
         models.tms_raw_trip_hdr_tbl.update({
             status:'FAILED',
-            err_message:error.name || error.message
+            err_message:error?.message ?? error?.name
         },
         {
             where:{
