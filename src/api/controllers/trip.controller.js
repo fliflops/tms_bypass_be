@@ -22,7 +22,8 @@ exports.createTripJob = async(req,res,next) => {
         await tripService.createTripRaw(jobId,req.processor.id);
         await queues.tripQueues.uploadTripQueue.add(`trip:upload:${req.processor.id}-${moment().format('YYYYMMDD_HHMMSS')}`,data,
         {
-            jobId: jobId
+            jobId: jobId,
+            //removeOnFail:true
         })
 
         res.status(200).json(jobId);
@@ -55,7 +56,8 @@ exports.convertTripJob = async(req,res,next) => {
             data: data.tms_raw_trip_tbls,
             user: req.processor.id
         },{
-            jobId: data.upload_id
+            jobId: data.upload_id,
+            //removeOnFail:true
         })
 
         res.status(200).json();

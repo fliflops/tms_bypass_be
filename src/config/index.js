@@ -54,6 +54,29 @@ module.exports = {
         },
         timezone: '+08:00' /**for writing to database**/
     },
+    scmdb:{
+        host: process.env.SCMDB_HOST,
+        database: process.env.SCMDB_NAME,
+        username: process.env.SCMDB_USER,
+        password: process.env.SCMDB_PASSWORD,
+        dialect: 'mssql',
+        logging: process.env.NODE_ENV === 'development',
+        dialectOptions : {
+            options:{
+                requestTimeout: 3600000
+            }
+        },
+        pool: { 
+            max: 1000000,
+            min: 0,
+            idle: 2000000,
+            acquire: 2000000,
+            idleTimeoutMillis: 50,
+            evictionRunIntervalMillis: 5,
+            softIdleTimeoutMillis: 5,
+            logging: false
+        }
+    },
     redis,
     ioredis
 }

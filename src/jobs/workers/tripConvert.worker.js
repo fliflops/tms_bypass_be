@@ -1,6 +1,7 @@
 const {Worker} = require('bullmq');
-const {ioredis} = require('../../config');
+const {ioredis, scmdb} = require('../../config');
 const tripService = require('../../../src/api/services/trip.service');
+const scmdbService = require('../../../src/api/services/scmdb.service');
 const models = require('../../api/models').db
 
 module.exports = async () => {
@@ -39,6 +40,8 @@ module.exports = async () => {
                     }))
                 }
             }));
+
+            await scmdbService.updateBrStatus(job.data.data.map(item => item.br_no))
 
             return converted
 
